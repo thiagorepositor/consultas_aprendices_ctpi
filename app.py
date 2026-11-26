@@ -6,7 +6,8 @@ import os
 # Cargar el archivo .env
 load_dotenv()
 
-
+app = Flask(__name__)
+app.json.ensure_ascii = False
 
 # Conectarse a  mi MongoDB Atlas
 cliente = MongoClient(os.getenv("MONGO_URI"))
