@@ -22,16 +22,23 @@ def cantidadAprendices():
     cantidad = aprendices.count_documents({})
     return jsonify({"CantidadAprendices": cantidad})
 
+
+
 @app.route("/api/cantidadAprendices/<nivel>")
 def cantidadPorNivel(nivel):
     cantidad = aprendices.count_documents({"NIVEL_DE_FORMACION": nivel})
     return jsonify({"CantidadAprendices": cantidad, "Nivel de formación": nivel})
+
+
 
 @app.route("/api/programas/<nivel>")
 def programasPorNivel(nivel):
     # distinct trae los nombres sin repetir
     programas = aprendices.distinct("PROGRAMA", {"NIVEL_DE_FORMACION": nivel})
     return jsonify({"nivel de formación": nivel, "programas": programas})
+
+
+
 
 # ruta basada en inteligencia artificial ya que no comprendi el error del porque no ejecutaba ;c
 @app.route("/api/certificados/<programa>")
@@ -47,6 +54,9 @@ def certificados(programa):
     resultado = list(aprendices.find(filtro, campos))
     return jsonify({"Aprendices_Certificados": resultado, "Programa": programa})
 
+
+
+
 @app.route("/api/porCertificar/<int:ficha>/<int:cantidad>")
 def porCertificar(ficha, cantidad):
     filtro = {"FICHA": ficha, "ESTADO_APRENDIZ": "Por certificar"}
@@ -61,6 +71,9 @@ def porCertificar(ficha, cantidad):
 
     return jsonify({"Cantidad de Aprendices por Certificar": lista})
 
+
+
+
 @app.route("/api/terminadaUnificacion/<programa>")
 def terminadaUnificacion(programa):
     filtro = {"PROGRAMA": programa, "ESTADO_FICHA": "Terminada por unificación"}
@@ -73,6 +86,10 @@ def terminadaUnificacion(programa):
         lista.append(aprendiz)
 
     return jsonify({"Programa": programa, "Aprendices": lista})
+
+
+
+
 
 @app.route("/api/aprendicesPrograma/<programa>")
 def aprendicesPrograma(programa):
@@ -87,11 +104,19 @@ def aprendicesPrograma(programa):
 
     return jsonify({"Aprendices": lista})
 
+
+
+
+
 @app.route("/api/cantidadCertificados/<programa>")
 def cantidadCertificados(programa):
     filtro = {"PROGRAMA": programa, "ESTADO_APRENDIZ": "Certificado"}
     cantidad = aprendices.count_documents(filtro)
     return jsonify({"Programa": programa, "CantidadCertificados": cantidad})
+
+
+
+
 
 @app.route("/api/porEstado/<int:ficha>/<estado>")
 def porEstado(ficha, estado):
@@ -105,6 +130,14 @@ def porEstado(ficha, estado):
         lista.append(aprendiz)
 
     return jsonify({"Aprendices": lista, "Estado de los Aprendices": estado, "Ficha": ficha})
+
+
+
+
+@app.route("/api/programasComplementariaVirtual")
+def programasComplementaria():
+    programas = aprendices.distinct("PROGRAMA", {"NIVEL_DE_FORMACION": "COMPLEMENTARIA VIRTUAL"})
+    return jsonify({"nivel de formación": "COMPLEMENTARIA VIRTUAL", "programas": programas})
 
 
 if __name__ == "__main__":
