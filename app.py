@@ -27,5 +27,11 @@ def cantidadPorNivel(nivel):
     cantidad = aprendices.count_documents({"NIVEL_DE_FORMACION": nivel})
     return jsonify({"CantidadAprendices": cantidad, "Nivel de formación": nivel})
 
+@app.route("/api/programas/<nivel>")
+def programasPorNivel(nivel):
+    # distinct trae los nombres sin repetir
+    programas = aprendices.distinct("PROGRAMA", {"NIVEL_DE_FORMACION": nivel})
+    return jsonify({"nivel de formación": nivel, "programas": programas})
+
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
