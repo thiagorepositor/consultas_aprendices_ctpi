@@ -74,6 +74,19 @@ def terminadaUnificacion(programa):
 
     return jsonify({"Programa": programa, "Aprendices": lista})
 
+@app.route("/api/aprendicesPrograma/<programa>")
+def aprendicesPrograma(programa):
+    filtro = {"PROGRAMA": programa}
+    campos = {"_id": 0, "PROGRAMA": 1, "FICHA": 1, "NOMBRE": 1,
+              "PRIMER_APELLIDO": 1, "SEGUNDO_APELLIDO": 1}
+    resultado = aprendices.find(filtro, campos)
+
+    lista = []
+    for aprendiz in resultado:
+        lista.append(aprendiz)
+
+    return jsonify({"Aprendices": lista})
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
